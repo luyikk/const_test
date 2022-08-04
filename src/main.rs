@@ -1,17 +1,10 @@
 mod const_hex;
-use crate::const_hex::*;
-
-const DATA: &'static [u8] = {
-    const HEX: HexData = hex(b"niahcisa");
-    const LEN: usize = HEX.len;
-    &HexData::encode::<LEN>(HEX.buf)
-};
+use const_hex::*;
 
 macro_rules! hex_encode {
     ($buf:expr) => {{
-        const _HEX: HexData = hex($buf);
-        const _LEN: usize = _HEX.len;
-        const _DATA: &'static [u8] = &HexData::encode::<_LEN>(_HEX.buf);
+        const _LEN: usize = get_encode_hex_len($buf.len());
+        const _DATA: &'static [u8] = &encode::<_LEN>($buf);
         _DATA
     }};
 }
@@ -20,7 +13,6 @@ const MD: &'static [u8] = hex_encode!(b"aabxcsadf");
 const HD: &'static [u8] = hex_encode!(b"aabxcsadf");
 
 fn main() {
-    println!("{:?}", DATA);
     unsafe {
         let x = std::str::from_utf8_unchecked(MD);
         println!("{:?}", x);
