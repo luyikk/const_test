@@ -17,3 +17,11 @@ pub const fn encode<const LEN: usize>(mut input: &[u8]) -> [u8; LEN] {
     out
 }
 
+#[macro_export]
+macro_rules! hex_encode {
+    ($buf:expr) => {{
+        const _LEN: usize = get_encode_hex_len($buf.len());
+        const _DATA: &'static [u8] = &encode::<_LEN>($buf);
+        _DATA
+    }};
+}
